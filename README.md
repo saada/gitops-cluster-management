@@ -1,5 +1,7 @@
 # Codifying Multicloud Ops: Exploring the operator pattern with GitOps
 
+Estimated time: 75 mins
+
 ## Abstract
 
 > "Kubernetes is a platform for building platforms." - Kelsey Hightower [tweet](https://twitter.com/kelseyhightower/status/935252923721793536)
@@ -30,7 +32,13 @@ We'll learn how to use operator patterns and tools such as the shell-operator to
 
 * [Install eksctl](https://github.com/weaveworks/eksctl#installation)
 * direnv
+* ssh key pair name in us-east-1 region
+
+### Maintainer pre-requisites
+
 * clusterctl
+* krew
+* kubectl krew install neat
 
 ## Instructions
 
@@ -43,8 +51,25 @@ vi .envrc # fill in all credentials
 direnv allow
 # create eks cluster
 make eks
-# install flux and CAPI
+# install flux and CAPI on management cluster
 make bootstrap
+```
+
+## Automatically install things on remote cluster
+
+```yaml
+  postKubeadmCommands:
+    - 'sh /tmp/addons_install.sh'
+  files:
+  - owner: root:root
+    path: /tmp/addons_install.sh
+    permissions: "0700"
+    content: |
+      #!/bin/bash
+      apt-get install curl
+      export GITHUB_TOKEN="..."
+      curl --request GET --header "Authorization: token ${GITHUB_TOKEN}" --header 'Accept: application/vnd.github.v3.raw' 'https://raw.githubusercontent.com/saada/aws-webinar/master/flux-ec2/install.sh' -o install.sh
+      sh install.sh
 ```
 
 ## Monitor cluster creation
@@ -62,4 +87,24 @@ kubectl create namespace example-monitor-pods --dry-run -o yaml > operators/shel
 kubectl create serviceaccount monitor-pods-acc --namespace example-monitor-pods --dry-run -o yaml > operators/shell-operator/sa.yaml
 kubectl create clusterrole monitor-pods --verb=get,watch,list --resource=pods --dry-run -o yaml > operators/shell-operator/cr.yaml
 kubectl create clusterrolebinding monitor-pods --clusterrole=monitor-pods --serviceaccount=example-monitor-pods:monitor-pods-acc --dry-run -o yaml > operators/shell-operator/crb.yaml
+```
+
+## Maintainer Notes
+
+```sh
+curl -L -o examples/cni/weavenet.yaml https://cloud.weave.works/k8s/net
+curl -L -o examples/cni/calico.yaml https://docs.projectcalico.org/manifests/calico.yaml
+
+## regenerate capi manifests
+clusterctl init --infrastructure aws || true
+for ns in capa-system capi-system capi-kubeadm-bootstrap-system capi-kubeadm-control-plane-system
+do
+    kubectl get deploy,svc,role,rolebinding -n ${ns} -o yaml | kubectl neat > ./deploy/capi/${ns}.yaml
+done
+
+# create sample clusters
+clusterctl config cluster ec2-cluster-1 --kubernetes-version v1.17.3 --control-plane-machine-count=3 --worker-machine-count=3 > examples/clusters/ec2-cluster-1.yaml
+clusterctl config cluster ec2-cluster-2 --kubernetes-version v1.17.3 --control-plane-machine-count=3 --worker-machine-count=3 > examples/clusters/ec2-cluster-2.yaml
+
+clusterctl delete --all
 ```

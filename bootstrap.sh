@@ -71,9 +71,10 @@ kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/master/d
 helm upgrade -i flux fluxcd/flux --wait \
     --namespace fluxcd \
     --set git.url=https://${GIT_USER}:${GIT_DEPLOY_TOKEN}@github.com/${GIT_USER}/${GIT_REPO_NAME}.git \
-    --set git.path="deploy" \
+    --set git.path="flux-mgmt" \
     --set git.timeout=120s \
     --set git.pollInterval=1m \
+    --set syncGarbageCollection.enabled=true \
     --set rbac.create=true
 
 ## helm operator
@@ -83,16 +84,3 @@ helm upgrade helm-operator fluxcd/helm-operator \
     --wait \
     --namespace fluxcd \
     --set helm.versions=v3
-
-# CAPI
-clusterctl init --infrastructure aws || true
-
-## hand over gitops management to flux
-for ns in capa-system capi-system capi-kubeadm-bootstrap-system capi-kubeadm-control-plane-system
-do
-    kubectl get deploy,svc,role,rolebinding -n ${ns} -o yaml | kubectl neat > ./deploy/capi/${ns}.yaml
-done
-
-# create clusters
-clusterctl config cluster ec2-cluster-1 --kubernetes-version v1.17.3 --control-plane-machine-count=3 --worker-machine-count=3 > deploy/clusters/ec2-cluster-1.yaml
-clusterctl config cluster ec2-cluster-2 --kubernetes-version v1.17.3 --control-plane-machine-count=3 --worker-machine-count=3 > deploy/clusters/ec2-cluster-2.yaml

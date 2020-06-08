@@ -1,11 +1,7 @@
 #!/bin/bash
-all: eks bootstrap
-# build:
-# 	kind create cluster || true
-# 	helm upgrade -i flux fluxcd/flux --wait --namespace flux --set git.url=git@github.com:yourname/my-eks-config.git --set git.pollInterval=1m
-# 	cd operators/pods-hook/ && docker build -t "saada/shell-operator:pods-hook" .
-# 	docker push "saada/shell-operator:pods-hook"
- 	# kind load docker-image "saada/shell-operator:pods-hook"
+build-operators:
+	cd operators/secret-copier/ && docker build -t "saada/shell-operator:secret-copier" .
+	docker push "saada/shell-operator:secret-copier"
 eks:
 	eksctl create cluster mahmoud-webinar
 bootstrap:
