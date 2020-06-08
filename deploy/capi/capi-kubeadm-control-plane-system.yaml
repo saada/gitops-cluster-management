@@ -5,10 +5,12 @@ items:
   metadata:
     annotations:
       deployment.kubernetes.io/revision: "1"
+      fluxcd.io/sync-checksum: 438d51da482e68a8c37965653ada8a0f56a7d629
     labels:
       cluster.x-k8s.io/provider: control-plane-kubeadm
       clusterctl.cluster.x-k8s.io: ""
       control-plane: controller-manager
+      fluxcd.io/sync-gc-mark: sha256.m9D0EV8dvREnf0g34daANo7RpQe34v2qBBtduuysBP0
     name: capi-kubeadm-control-plane-controller-manager
     namespace: capi-kubeadm-control-plane-system
   spec:
@@ -66,10 +68,13 @@ items:
 - apiVersion: v1
   kind: Service
   metadata:
+    annotations:
+      fluxcd.io/sync-checksum: 00668667feee717662112b5ccf6441b0bc8d4264
     labels:
       cluster.x-k8s.io/provider: control-plane-kubeadm
       clusterctl.cluster.x-k8s.io: ""
       control-plane: controller-manager
+      fluxcd.io/sync-gc-mark: sha256.L-Rg7e5KKCQiDwpW2zzE-w-KKrgK_JbooZmznoN5tug
     name: capi-kubeadm-control-plane-controller-manager-metrics-service
     namespace: capi-kubeadm-control-plane-system
   spec:
@@ -147,9 +152,12 @@ items:
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: RoleBinding
   metadata:
+    annotations:
+      fluxcd.io/sync-checksum: 3970de99a2fb8a65dcbdcb535cde98f2f97e47e7
     labels:
       cluster.x-k8s.io/provider: control-plane-kubeadm
       clusterctl.cluster.x-k8s.io: ""
+      fluxcd.io/sync-gc-mark: sha256.s2qxhsUB_zgVjmUIvzNpN-q6NEdQLHqNbLZ3qCuvR78
     name: capi-kubeadm-control-plane-leader-election-rolebinding
     namespace: capi-kubeadm-control-plane-system
   roleRef:

@@ -5,10 +5,12 @@ items:
   metadata:
     annotations:
       deployment.kubernetes.io/revision: "1"
+      fluxcd.io/sync-checksum: 6692367a51701d9ae599b24d0b6239c61764b486
     labels:
       cluster.x-k8s.io/provider: infrastructure-aws
       clusterctl.cluster.x-k8s.io: ""
       control-plane: capa-controller-manager
+      fluxcd.io/sync-gc-mark: sha256.-_k-YkdmQ6P9pWqSumPauDrwl8mP6Rwy19Hxqe-1hD0
     name: capa-controller-manager
     namespace: capa-system
   spec:
@@ -98,6 +100,7 @@ items:
   kind: Service
   metadata:
     annotations:
+      fluxcd.io/sync-checksum: 2ee018ba70823127007ea55950e29f9c8f16a780
       prometheus.io/port: "8443"
       prometheus.io/scheme: https
       prometheus.io/scrape: "true"
@@ -105,6 +108,7 @@ items:
       cluster.x-k8s.io/provider: infrastructure-aws
       clusterctl.cluster.x-k8s.io: ""
       control-plane: capa-controller-manager
+      fluxcd.io/sync-gc-mark: sha256.97l90OHLP9M9mWRVvVstkT-LDy3Fnu0ju3rMRdJyaog
     name: capa-controller-manager-metrics-service
     namespace: capa-system
   spec:
@@ -144,9 +148,12 @@ items:
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: RoleBinding
   metadata:
+    annotations:
+      fluxcd.io/sync-checksum: d9b0ebb3756870341a902d0c85737cc0a8627817
     labels:
       cluster.x-k8s.io/provider: infrastructure-aws
       clusterctl.cluster.x-k8s.io: ""
+      fluxcd.io/sync-gc-mark: sha256.hb3Ynd-AvMCCGSWyE1pSC63F6D1N-n1CfjmRcnd9WLk
     name: capa-leader-election-rolebinding
     namespace: capa-system
   roleRef:

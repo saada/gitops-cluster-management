@@ -47,6 +47,14 @@ make eks
 make bootstrap
 ```
 
+## Monitor cluster creation
+
+```
+kubectl get clusters -w
+kubectl get machines -w
+kubectl logs --tail 100 -f -n capa-system deploy/capa-controller-manager -c manager
+```
+
 ## Shell Operator
 
 ```sh
