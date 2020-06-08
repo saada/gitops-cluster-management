@@ -26,18 +26,21 @@ We'll learn how to use operator patterns and tools such as the shell-operator to
     * show how s3 bucket is cleaned up
     * show how redis cluster is cleaned up
 
-## Step 1
+## Pre-requisites
 
-* Install wksctl
+* [Install eksctl](https://github.com/weaveworks/eksctl#installation)
+* direnv
+
+## Instructions
+
+* Fork this repo and then
 
 ```sh
-version="0.8.2-beta.6" # set to "darwin" for macOS or "linux"
-my_os="darwin" # set to "darwin" for macOS or "linux"
-curl -sSLO https://github.com/weaveworks/wksctl/releases/download/v${version}/wksctl-${version}-${my_os}-x86_64.tar.gz
-tar -zxvf wksctl-${version}-darwin-x86_64.tar.gz
-
+git clone <ssh-url-to-fork-repo>
+cp .envrc.example .envrc
+vi .envrc # fill in all credentials
+direnv allow
 ```
-
 
 ## Shell Operator
 
