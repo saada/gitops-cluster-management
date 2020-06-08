@@ -64,10 +64,10 @@ data:
   values: ${AWS_CAPI_VALUES_B64}
 END
 
+# flux
 kubectl create ns fluxcd || true
 helm repo add fluxcd https://charts.fluxcd.io
 kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/master/deploy/crds.yaml
-
 helm upgrade -i flux fluxcd/flux --wait \
     --namespace fluxcd \
     --set git.url=https://${GIT_USER}:${GIT_DEPLOY_TOKEN}@github.com/${GIT_USER}/${GIT_REPO_NAME}.git \
@@ -76,9 +76,23 @@ helm upgrade -i flux fluxcd/flux --wait \
     --set git.pollInterval=1m \
     --set rbac.create=true
 
+## helm operator
 helm upgrade helm-operator fluxcd/helm-operator \
     --force \
     -i \
     --wait \
     --namespace fluxcd \
     --set helm.versions=v3
+
+# CAPI
+clusterctl init --infrastructure aws || true
+
+## hand over gitops management to flux
+for ns in capa-system capi-system capi-kubeadm-bootstrap-system capi-kubeadm-control-plane-system
+do
+    kubectl get deploy,svc,role,rolebinding -n ${ns} -o yaml | kubectl neat > ./deploy/capi/${ns}.yaml
+done
+
+# create clusters
+clusterctl config cluster ec2-cluster-1 --kubernetes-version v1.17.3 --control-plane-machine-count=3 --worker-machine-count=3 > deploy/clusters/ec2-cluster-1.yaml
+clusterctl config cluster ec2-cluster-2 --kubernetes-version v1.17.3 --control-plane-machine-count=3 --worker-machine-count=3 > deploy/clusters/ec2-cluster-2.yaml

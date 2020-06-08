@@ -30,6 +30,7 @@ We'll learn how to use operator patterns and tools such as the shell-operator to
 
 * [Install eksctl](https://github.com/weaveworks/eksctl#installation)
 * direnv
+* clusterctl
 
 ## Instructions
 
@@ -40,6 +41,10 @@ git clone <ssh-url-to-fork-repo>
 cp .envrc.example .envrc
 vi .envrc # fill in all credentials
 direnv allow
+# create eks cluster
+make eks
+# install flux and CAPI
+make bootstrap
 ```
 
 ## Shell Operator

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+all: eks bootstrap
 # build:
 # 	kind create cluster || true
 # 	helm upgrade -i flux fluxcd/flux --wait --namespace flux --set git.url=git@github.com:yourname/my-eks-config.git --set git.pollInterval=1m
@@ -10,3 +10,5 @@ eks:
 	eksctl create cluster mahmoud-webinar
 bootstrap:
 	./bootstrap.sh
+clean:
+	clusterctl delete --all

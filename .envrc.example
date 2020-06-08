@@ -3,3 +3,8 @@ export AWS_SECRET_ACCESS_KEY=
 export GIT_USER=
 export GIT_DEPLOY_TOKEN=
 export GIT_REPO_NAME=
+export AWS_REGION=us-east-1
+export AWS_SSH_KEY_NAME=default
+# Select instance types
+export AWS_CONTROL_PLANE_MACHINE_TYPE=t3.large
+export AWS_NODE_MACHINE_TYPE=t3.large

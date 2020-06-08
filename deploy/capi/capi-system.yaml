@@ -1,0 +1,155 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+    labels:
+      cluster.x-k8s.io/provider: cluster-api
+      clusterctl.cluster.x-k8s.io: ""
+      control-plane: controller-manager
+    name: capi-controller-manager
+    namespace: capi-system
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        cluster.x-k8s.io/provider: cluster-api
+        control-plane: controller-manager
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          cluster.x-k8s.io/provider: cluster-api
+          control-plane: controller-manager
+      spec:
+        containers:
+        - args:
+          - --secure-listen-address=0.0.0.0:8443
+          - --upstream=http://127.0.0.1:8080/
+          - --logtostderr=true
+          - --v=10
+          image: gcr.io/kubebuilder/kube-rbac-proxy:v0.4.1
+          imagePullPolicy: IfNotPresent
+          name: kube-rbac-proxy
+          ports:
+          - containerPort: 8443
+            name: https
+            protocol: TCP
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - args:
+          - --metrics-addr=127.0.0.1:8080
+          - --enable-leader-election
+          command:
+          - /manager
+          image: us.gcr.io/k8s-artifacts-prod/cluster-api/cluster-api-controller:v0.3.6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: healthz
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: manager
+          ports:
+          - containerPort: 9440
+            name: healthz
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /readyz
+              port: healthz
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        terminationGracePeriodSeconds: 10
+        tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      cluster.x-k8s.io/provider: cluster-api
+      clusterctl.cluster.x-k8s.io: ""
+      control-plane: controller-manager
+    name: capi-controller-manager-metrics-service
+    namespace: capi-system
+  spec:
+    clusterIP: 10.101.138.55
+    ports:
+    - name: https
+      port: 8443
+      targetPort: https
+    selector:
+      cluster.x-k8s.io/provider: cluster-api
+      control-plane: controller-manager
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    labels:
+      cluster.x-k8s.io/provider: cluster-api
+      clusterctl.cluster.x-k8s.io: ""
+    name: capi-leader-election-role
+    namespace: capi-system
+  rules:
+  - resources:
+    - configmaps
+    verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+  - resources:
+    - configmaps/status
+    verbs:
+    - get
+    - update
+    - patch
+  - resources:
+    - events
+    verbs:
+    - create
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    labels:
+      cluster.x-k8s.io/provider: cluster-api
+      clusterctl.cluster.x-k8s.io: ""
+    name: capi-leader-election-rolebinding
+    namespace: capi-system
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: capi-leader-election-role
+  subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: capi-system
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
+
