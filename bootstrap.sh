@@ -101,3 +101,5 @@ helm upgrade helm-operator fluxcd/helm-operator \
     --wait \
     --namespace fluxcd \
     --set helm.versions=v3
+
+clusterctl init --infrastructure aws
