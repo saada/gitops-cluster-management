@@ -21,7 +21,7 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-      
+
     - name: build and push deployment copier
       uses: docker/build-push-action@v1.1.0
       with:
@@ -30,7 +30,7 @@ jobs:
         path: ./operators/deployment-copier
         repository: saada/shell-operator
         tags: deployment-copier
-    
+
     - name: build and push secret copier
       uses: docker/build-push-action@v1.1.0
       with:
