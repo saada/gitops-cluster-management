@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -5,6 +6,6 @@ metadata:
 spec:
   containers:
   - name: shell-operator
-    image: shell-operator:monitor-pods
+    image: saada/shell-operator:secret-copier
     imagePullPolicy: Always
-  serviceAccountName: monitor-pods-acc
+  serviceAccountName: secret-copier-acc
