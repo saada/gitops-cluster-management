@@ -78,7 +78,6 @@ items:
     name: capi-kubeadm-bootstrap-controller-manager-metrics-service
     namespace: capi-kubeadm-bootstrap-system
   spec:
-    clusterIP: 10.110.115.154
     ports:
     - name: https
       port: 8443

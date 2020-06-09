@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eu
 
-if [[ -z "${AWS_ACCESS_KEY_ID}" ]] || [[ -z "${AWS_SECRET_ACCESS_KEY}" ]]; then
-  echo "No AWS credentials found [AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY]"
+if [[ -z "${CAPI_AWS_ACCESS_KEY_ID}" ]] || [[ -z "${CAPI_AWS_SECRET_ACCESS_KEY}" ]]; then
+  echo "No AWS credentials found [CAPI_AWS_ACCESS_KEY_ID, CAPI_AWS_SECRET_ACCESS_KEY]"
   exit 1
 fi
 
@@ -14,12 +14,29 @@ fi
 
 export AWS_B64ENCODED_CREDENTIALS=$(cat <<EOF | base64
 [default]
-aws_access_key_id = ${AWS_ACCESS_KEY_ID}
-aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}
+aws_access_key_id = ${CAPI_AWS_ACCESS_KEY_ID}
+aws_secret_access_key = ${CAPI_AWS_SECRET_ACCESS_KEY}
 EOF
 )
 
-kubectl apply -f - <<END
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: capi-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: capi-kubeadm-bootstrap-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: capi-kubeadm-control-plane-system
+EOF
+
+kubectl apply -f - <<EOF
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -33,9 +50,9 @@ metadata:
 type: Opaque
 data:
   credentials: ${AWS_B64ENCODED_CREDENTIALS}
-END
+EOF
 
-export AWS_CAPI_VALUES_B64=$(cat <<END | base64
+export AWS_CAPI_VALUES_B64=$(cat <<EOF | base64
 bootstrap:
   secret:
     value: ${AWS_B64ENCODED_CREDENTIALS}
@@ -45,10 +62,10 @@ controlplane:
 flux:
   authkey: ${GIT_DEPLOY_TOKEN}
   authuser: ${GIT_USER}
-END
+EOF
 )
 
-kubectl apply -f - <<END
+kubectl apply -f - <<EOF
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -62,7 +79,7 @@ metadata:
 type: Opaque
 data:
   values: ${AWS_CAPI_VALUES_B64}
-END
+EOF
 
 # flux
 kubectl create ns fluxcd || true

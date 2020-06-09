@@ -100,7 +100,6 @@ items:
     name: capi-controller-manager-metrics-service
     namespace: capi-system
   spec:
-    clusterIP: 10.101.138.55
     ports:
     - name: https
       port: 8443

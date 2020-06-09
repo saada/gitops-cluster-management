@@ -99,7 +99,7 @@ curl -L -o examples/cni/calico.yaml https://docs.projectcalico.org/manifests/cal
 clusterctl init --infrastructure aws || true
 for ns in capa-system capi-system capi-kubeadm-bootstrap-system capi-kubeadm-control-plane-system
 do
-    kubectl get deploy,svc,role,rolebinding -n ${ns} -o yaml | kubectl neat > ./deploy/capi/${ns}.yaml
+    kubectl get deploy,svc,role,rolebinding -n ${ns} -o yaml | kubectl neat | grep -v clusterIP > ./flux-mgmt/capi/${ns}.yaml
 done
 
 # create sample clusters

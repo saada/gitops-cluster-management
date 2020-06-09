@@ -78,7 +78,6 @@ items:
     name: capi-kubeadm-control-plane-controller-manager-metrics-service
     namespace: capi-kubeadm-control-plane-system
   spec:
-    clusterIP: 10.96.0.220
     ports:
     - name: https
       port: 8443

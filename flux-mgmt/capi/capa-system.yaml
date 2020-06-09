@@ -112,7 +112,6 @@ items:
     name: capa-controller-manager-metrics-service
     namespace: capa-system
   spec:
-    clusterIP: 10.102.119.83
     ports:
     - name: https
       port: 8443
