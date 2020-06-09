@@ -8,7 +8,7 @@ hook::config() {
   "configVersion":"v1",
   "kubernetes": [
     {
-      "apiVersion": "v1",
+      "apiVersion": "apps/v1",
       "kind": "Deployment",
       "executeHookOnEvent": [
         "Added",

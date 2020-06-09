@@ -8,8 +8,8 @@ hook::config() {
   "configVersion": "v1",
   "kubernetes": [
     {
-      "apiVersion": "v1",
-      "kind": "deployment",
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
       "executeHookOnEvent": [
         "Deleted"
       ],
