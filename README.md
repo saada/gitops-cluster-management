@@ -33,10 +33,10 @@ We'll learn how to use operator patterns and tools such as the shell-operator to
 * [Install eksctl](https://github.com/weaveworks/eksctl#installation)
 * direnv
 * ssh key pair name in us-east-1 region
+* clusterctl
 
 ### Maintainer pre-requisites
 
-* clusterctl
 * krew
 * kubectl krew install neat
 
@@ -56,6 +56,8 @@ make bootstrap
 ```
 
 ## Automatically install things on remote cluster
+
+Update your `KubeadmControlPlane` as follows
 
 ```yaml
   postKubeadmCommands:
@@ -80,7 +82,10 @@ kubectl get machines -w
 kubectl logs --tail 100 -f -n capa-system deploy/capa-controller-manager -c manager
 ```
 
-## Shell Operator
+
+## Maintainer Notes
+
+### Shell Operator
 
 ```sh
 kubectl create namespace example-monitor-pods --dry-run -o yaml > operators/shell-operator/ns.yaml
@@ -89,7 +94,7 @@ kubectl create clusterrole monitor-pods --verb=get,watch,list --resource=pods --
 kubectl create clusterrolebinding monitor-pods --clusterrole=monitor-pods --serviceaccount=example-monitor-pods:monitor-pods-acc --dry-run -o yaml > operators/shell-operator/crb.yaml
 ```
 
-## Maintainer Notes
+### Cluster API
 
 ```sh
 curl -L -o examples/cni/weavenet.yaml https://cloud.weave.works/k8s/net
