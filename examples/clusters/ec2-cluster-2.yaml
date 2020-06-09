@@ -23,7 +23,7 @@ metadata:
   name: ec2-cluster-2
   namespace: default
 spec:
-  region: us-east-2
+  region: us-east-1
   sshKeyName: mahmoud-key
 ---
 apiVersion: controlplane.cluster.x-k8s.io/v1alpha3
