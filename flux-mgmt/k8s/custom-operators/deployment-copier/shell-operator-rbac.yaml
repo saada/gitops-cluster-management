@@ -14,7 +14,7 @@ rules:
 - apiGroups: [""]
   resources: ["namespaces"]
   verbs: ["get", "watch", "list"]
-- apiGroups: [""]
+- apiGroups: ["apps"]
   resources: ["deployments"]
   verbs: ["*"]
 
