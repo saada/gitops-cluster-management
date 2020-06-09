@@ -5,18 +5,17 @@ source /hooks/common/functions.sh
 hook::config() {
   cat <<EOF
 {
-  "configVersion":"v1",
+  "configVersion": "v1",
   "kubernetes": [
     {
       "apiVersion": "v1",
-      "kind": "Secret",
+      "kind": "secret",
       "executeHookOnEvent": [
-        "Added",
-        "Modified"
+        "Deleted"
       ],
       "labelSelector": {
         "matchLabels": {
-          "secret-copier": "yes"
+           "secret-copier": "yes"
         }
       },
       "namespace": {
@@ -40,20 +39,17 @@ hook::trigger() {
     exit 0
   fi
 
+  echo "TRIGGER - secret deleted"
+
   for secret in $(jq -r '.[] | .object.metadata.name' $BINDING_CONTEXT_PATH)
-  do
-    # loop through every namespace except 'default'
-    for namespace in $(kubectl get namespace -o json |
-                      jq -r '.items[] |
-                        select((.metadata.name == "default" | not) and .status.phase == "Active") | .metadata.name')
     do
-      # copy secret with a necessary data
-      kubectl -n default get secret $secret -o json | \
-        jq -r ".metadata.namespace=\"${namespace}\" |
-                .metadata |= with_entries(select([.key] | inside([\"name\", \"namespace\", \"labels\"])))" \
-        | kubectl::replace_or_create
+      for namespace in $(kubectl get namespace -o json |
+                          jq -r '.items[] |
+                            select((.metadata.name == "default" | not) and .status.phase == "Active") | .metadata.name')
+      do
+        kubectl -n $namespace delete secret $secret
+      done
     done
-  done
 }
 
 common::run_hook "$@"

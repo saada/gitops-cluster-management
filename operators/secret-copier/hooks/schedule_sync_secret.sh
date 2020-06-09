@@ -12,7 +12,7 @@ hook::config() {
   "schedule": [
     {
       "allowFailure": true,
-      "crontab": "0 3 * * *"
+      "crontab": "* * * * *"
     }
   ]
 }
@@ -20,6 +20,8 @@ EOF
 }
 
 hook::trigger() {
+  echo "TRIGGER - crontab"
+
   # Copy secrets to the other namespaces.
   for secret in $(kubectl -n default get secret -l secret-copier=yes -o name);
     do

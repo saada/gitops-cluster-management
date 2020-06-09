@@ -28,6 +28,7 @@ hook::trigger() {
     exit 0
   fi
 
+  echo "TRIGGER - namespace added"
 
   for namespace in $(jq -r '.[] | .object.metadata | select(.name == "default" | not ) | .name' $BINDING_CONTEXT_PATH);
   do
