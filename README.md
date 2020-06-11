@@ -30,19 +30,61 @@ We'll learn how to use operator patterns and tools such as the shell-operator to
 
 ## Pre-requisites
 
-* [Install eksctl](https://github.com/weaveworks/eksctl#installation)
+* Go through [pre-requisities](https://weaveworks-gitops.awsworkshop.io/20_weaveworks_prerequisites.html)
+  * For the IAM Profile, use "modernization-admin"
+  * Show hidden files in Cloud9 by going to `Settings > User Settings > Tree and Go Panel`, then set the Hidden File Pattern to `*.pyc, __pycache__`
+
 * direnv
-* ssh key pair name in us-east-1 region
+
+```sh
+curl -sfL https://direnv.net/install.sh | bash
+echo "eval '$(direnv hook bash)'" >> ~/.bashrc
+source ~/.bashrc
+```
+
 * clusterctl
 
-### Maintainer pre-requisites
+```sh
+curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.3.6/clusterctl-linux-amd64 -o clusterctl
+chmod +x ./clusterctl
+sudo mv ./clusterctl /usr/local/bin/clusterctl
+clusterctl version
+```
 
-* krew
-* kubectl krew install neat
+## Workshop
 
-## Instructions
 
-* Fork this repo and then
+* You should see an eks cluster already provisioned under `eksctl get clusters`
+* `eksctl utils write-kubeconfig --cluster EKS-G7H1LEOA`
+* Ensure `aws sts get-caller-identity` shows the right IAM profile: `arn:aws:sts::440220270053:assumed-role/modernization-admin`
+* Navigate to the [AWS console](https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#KeyPairs:)
+  * Add a new Key Pair named "weaveworks-workshop"
+  * In Cloud9 tab, click File > Upload local files, then choose the Key Pair's pem file that was downloaded. It should have the name `weaveworks-workshop.pem`
+* Add ssh key to your Github account
+  * On Cloud9, run: `ssh-keygen -t rsa -b 4096` and accept defaults
+  * Run `cat ~/.ssh/id_rsa.pub` and copy the output
+  * Go to [Github > Settings > SSH Keys > New SSH key](https://github.com/settings/ssh/new) and paste your public key
+* Go to [workshop repo](git@github.com:saada/gitops-cluster-management.git), and click on Fork
+* Clone the forked repo workshop repo with `git clone git@github.com:YOURUSERNAME/gitops-cluster-management.git`
+* Set up credentials
+  * `cd gitops-cluster-management`, then run `cp .envrc.example .envrc`
+  * Open `.envrc` and start populating
+    * `CAPI_AWS_ACCESS_KEY_ID` to your workshop `AWS_ACCESS_KEY_ID`
+    * `CAPI_AWS_SECRET_ACCESS_KEY` to your workshop `AWS_SECRET_ACCESS_KEY`
+    * `GIT_USER` to your github username
+    * `GIT_DEPLOY_TOKEN` is populated by creating a github [access token](https://github.com/settings/tokens) with `repo` permissions.
+    * `GIT_REPO_NAME` to the forked repo name `gitops-cluster-management`
+    * `AWS_REGION` to `us-west-2`
+    * `AWS_SSH_KEY_NAME` to `weaveworks-workshop` that we created earlier
+    * we can leave `AWS_CONTROL_PLANE_MACHINE_TYPE` and `AWS_NODE_MACHINE_TYPE` as `t3.large`
+  * Finally run `direnv allow`. Which will export these env vars whenever you're in the git repo directory.
+
+* Bootstrap your cluster
+  * run `make bootstrap`
+
+* Cleanup
+  * Delete the [ssh key](https://github.com/settings/keys) we added to your github
+  * Delete the [access token](https://github.com/settings/tokens) we added to your github
 
 ```sh
 git clone <ssh-url-to-fork-repo>

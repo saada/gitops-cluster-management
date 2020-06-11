@@ -1,5 +1,10 @@
 ## Maintainer Notes
 
+### Maintainer pre-requisites
+
+* krew
+* kubectl krew install neat
+
 ### Shell Operator
 
 ```sh
