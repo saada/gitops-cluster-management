@@ -14,21 +14,15 @@ fi
 # base64 behaves differently in macOS vs Linux
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   # linux
-  export AWS_B64ENCODED_CREDENTIALS=$(cat <<EOF | base64 -w 0
-[default]
-aws_access_key_id = ${CAPI_AWS_ACCESS_KEY_ID}
-aws_secret_access_key = ${CAPI_AWS_SECRET_ACCESS_KEY}
-EOF
-)
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-  # macOS
-  export AWS_B64ENCODED_CREDENTIALS=$(cat <<EOF | base64
-[default]
-aws_access_key_id = ${CAPI_AWS_ACCESS_KEY_ID}
-aws_secret_access_key = ${CAPI_AWS_SECRET_ACCESS_KEY}
-EOF
-)
+  alias base64="base64 -w 0"
 fi
+
+export AWS_B64ENCODED_CREDENTIALS=$(cat <<EOF | base64
+[default]
+aws_access_key_id = ${CAPI_AWS_ACCESS_KEY_ID}
+aws_secret_access_key = ${CAPI_AWS_SECRET_ACCESS_KEY}
+EOF
+)
 
 kubectl apply -f - <<EOF
 apiVersion: v1
