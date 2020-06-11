@@ -86,16 +86,6 @@ clusterctl version
   * Delete the [ssh key](https://github.com/settings/keys) we added to your github
   * Delete the [access token](https://github.com/settings/tokens) we added to your github
 
-```sh
-git clone <ssh-url-to-fork-repo>
-cp .envrc.example .envrc
-vi .envrc # fill in all credentials
-direnv allow
-# create eks cluster
-make eks
-# install flux and CAPI on management cluster
-make bootstrap
-```
 
 ## Automatically install things on remote cluster
 
