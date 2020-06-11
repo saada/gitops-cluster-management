@@ -37,8 +37,8 @@ clusterctl version
 ## Workshop
 
 * You should see an eks cluster already provisioned under `eksctl get clusters`
-* `eksctl utils write-kubeconfig --cluster EKS-G7H1LEOA`
-* Ensure `aws sts get-caller-identity` shows the right IAM profile: `arn:aws:sts::440220270053:assumed-role/modernization-admin`
+* `eksctl utils write-kubeconfig --cluster EKS-YOURCLUSTERNAME`
+* Ensure `aws sts get-caller-identity` shows the right IAM profile: `...:assumed-role/modernization-admin`
 * Navigate to the [AWS console](https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#KeyPairs:)
   * Add a new Key Pair named "weaveworks-workshop"
   * In Cloud9 tab, click File > Upload local files, then choose the Key Pair's pem file that was downloaded. It should have the name `weaveworks-workshop.pem`
