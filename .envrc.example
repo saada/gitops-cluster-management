@@ -1,7 +1,6 @@
 export CAPI_AWS_ACCESS_KEY_ID=
 export CAPI_AWS_SECRET_ACCESS_KEY=
 export GIT_USER=
-export GIT_DEPLOY_TOKEN=
 export GIT_REPO_NAME=
 export AWS_REGION=us-east-2
 export AWS_SSH_KEY_NAME=

@@ -72,7 +72,9 @@ clusterctl version
     * `CAPI_AWS_ACCESS_KEY_ID` to your workshop `AWS_ACCESS_KEY_ID`
     * `CAPI_AWS_SECRET_ACCESS_KEY` to your workshop `AWS_SECRET_ACCESS_KEY`
     * `GIT_USER` to your github username
-    * `GIT_DEPLOY_TOKEN` is populated by creating a github [access token](https://github.com/settings/tokens) with `repo` permissions.
+    * `GIT_DEPLOY_TOKEN` is populated by:
+      * Create ssh key with `ssh-keygen -t rsa -b 4096 -f flux_rsa`
+      * Go to https://github.com/YOURUSERNAME/gitops-cluster-management/settings/keys/new and create a github deploy key using the public key with `Allow write access` permission.
     * `GIT_REPO_NAME` to the forked repo name `gitops-cluster-management`
     * `AWS_REGION` to `us-west-2`
     * `AWS_SSH_KEY_NAME` to `weaveworks-workshop` that we created earlier
@@ -81,10 +83,15 @@ clusterctl version
 
 * Bootstrap your cluster
   * run `make bootstrap`
+  * Copy printed public key and paste it in your git repo's Settings > Deploy Keys > Add Deploy Key. Make sure to turn on write access. If no key shows up, try running `fluxctl identity --k8s-fwd-ns fluxcd` until it shows up.
+  * `kubectl get pod` should now show pods under `flux-mgmt` directory
+
+* Create EC2 clusters with GitOps
+  * copy `examples/clusters/ec2-cluster-1.yaml` into `flux-mgmt/clusters`. Then, modify the new file's region to `us-west-2`.
 
 * Cleanup
   * Delete the [ssh key](https://github.com/settings/keys) we added to your github
-  * Delete the [access token](https://github.com/settings/tokens) we added to your github
+  * Delete the deploy key in https://github.com/YOURUSERNAME/gitops-cluster-management/settings/keys we added to your github
 
 
 ## Automatically install things on remote cluster
