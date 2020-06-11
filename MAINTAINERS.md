@@ -41,3 +41,23 @@ clusterctl config cluster ec2-cluster-2 --kubernetes-version v1.17.3 --control-p
 
 clusterctl delete --all
 ```
+
+
+## Old Workshop Notes
+
+* Run CAPI controllers to spin up Kubernetes clusters
+* Create an operator with shell-operator that monitors deployments with a special annotation
+    * if annotation exists, it runs the following
+        * provision s3 bucket with custom operator
+        * create s3 bucket
+        * create redis cluster with helm
+        * backup redis to s3 bucket with cron job
+* Deploy our operator with gitops
+    * Spin up kind cluster
+    * Setup flux
+* Deploy WKP on top to monitor the cluster
+* Spin up 1 EKS cluster and 1 local cluster
+    * show how both clusters are in sync with git changes and how backups are not separated by bucket name
+* Tear down
+    * show how s3 bucket is cleaned up
+    * show how redis cluster is cleaned up
