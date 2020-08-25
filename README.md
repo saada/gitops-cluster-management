@@ -81,6 +81,12 @@ make bootstrap
 * Create EC2 clusters with GitOps
   * copy `examples/clusters/ec2-cluster-1.yaml` into `flux-mgmt/clusters`. Then, modify the new file's region to `us-west-2`.
 
+* Access cluster
+  * Install [krew](https://krew.sigs.k8s.io/docs/user-guide/setup/install/)
+  * Install [view-secret](https://github.com/elsesiy/kubectl-view-secret) plugin by running `krew install view-secret`
+  * Update local kubeconfig to desired cluster `kubectl view-secret mahmoud-capi-cluster-1-kubeconfig value > kubeconfig`
+  * `export KUBECONFIG=$(pwd)/kubeconfig`
+
 * Cleanup
   * Delete the [ssh key](https://github.com/settings/keys) we added to your github
   * Delete the deploy key in https://github.com/YOURUSERNAME/gitops-cluster-management/settings/keys we added to your github
