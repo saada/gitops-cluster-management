@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shell-operator
+  namespace: secret-copier
+spec:
+  containers:
+  - name: shell-operator
+    image: saada/shell-operator:secret-copier
+    imagePullPolicy: Always
+  serviceAccountName: secret-copier-acc
