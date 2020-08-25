@@ -76,7 +76,7 @@ metadata:
   namespace: default
 spec:
   clusterName: mahmoud-capi-cluster-1
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels: null
   template:
