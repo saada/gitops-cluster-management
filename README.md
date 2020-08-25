@@ -28,10 +28,20 @@ source ~/.bashrc
 * clusterctl
 
 ```sh
-curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v0.3.6/clusterctl-linux-amd64 -o clusterctl
+CLUSTERCTL_OS="linux"
+CLUSTERCTL_VERSION="v0.3.8"
+# CLUSTERCTL_OS="darwin"
+curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/${CLUSTERCTL_VERSION}/clusterctl-${CLUSTERCTL_OS}-amd64 -o clusterctl
 chmod +x ./clusterctl
 sudo mv ./clusterctl /usr/local/bin/clusterctl
 clusterctl version
+```
+
+## Webinar prep
+
+```sh
+make eks
+make bootstrap
 ```
 
 ## Workshop
