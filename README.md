@@ -88,9 +88,10 @@ make bootstrap
   * `export KUBECONFIG=$(pwd)/kubeconfig`
 
 * Cleanup
+  * Delete the CAPI resources from git and wait for deletion
   * Delete the [ssh key](https://github.com/settings/keys) we added to your github
   * Delete the deploy key in https://github.com/YOURUSERNAME/gitops-cluster-management/settings/keys we added to your github
-
+  * `make clean`
 
 ## Automatically install things on remote cluster
 
