@@ -1,7 +1,7 @@
 apiVersion: cluster.x-k8s.io/v1alpha3
 kind: Cluster
 metadata:
-  name: ec2-cluster-2
+  name: mahmoud-capi-cluster-2
   namespace: default
 spec:
   clusterNetwork:
@@ -11,16 +11,16 @@ spec:
   controlPlaneRef:
     apiVersion: controlplane.cluster.x-k8s.io/v1alpha3
     kind: KubeadmControlPlane
-    name: ec2-cluster-2-control-plane
+    name: mahmoud-capi-cluster-2-control-plane
   infrastructureRef:
     apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
     kind: AWSCluster
-    name: ec2-cluster-2
+    name: mahmoud-capi-cluster-2
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
 kind: AWSCluster
 metadata:
-  name: ec2-cluster-2
+  name: mahmoud-capi-cluster-2
   namespace: default
 spec:
   region: us-east-1
@@ -29,13 +29,13 @@ spec:
 apiVersion: controlplane.cluster.x-k8s.io/v1alpha3
 kind: KubeadmControlPlane
 metadata:
-  name: ec2-cluster-2-control-plane
+  name: mahmoud-capi-cluster-2-control-plane
   namespace: default
 spec:
   infrastructureTemplate:
     apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
     kind: AWSMachineTemplate
-    name: ec2-cluster-2-control-plane
+    name: mahmoud-capi-cluster-2-control-plane
   kubeadmConfigSpec:
     clusterConfiguration:
       apiServer:
@@ -60,7 +60,7 @@ spec:
 apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
 kind: AWSMachineTemplate
 metadata:
-  name: ec2-cluster-2-control-plane
+  name: mahmoud-capi-cluster-2-control-plane
   namespace: default
 spec:
   template:
@@ -72,10 +72,10 @@ spec:
 apiVersion: cluster.x-k8s.io/v1alpha3
 kind: MachineDeployment
 metadata:
-  name: ec2-cluster-2-md-0
+  name: mahmoud-capi-cluster-2-md-0
   namespace: default
 spec:
-  clusterName: ec2-cluster-2
+  clusterName: mahmoud-capi-cluster-2
   replicas: 3
   selector:
     matchLabels: null
@@ -85,18 +85,18 @@ spec:
         configRef:
           apiVersion: bootstrap.cluster.x-k8s.io/v1alpha3
           kind: KubeadmConfigTemplate
-          name: ec2-cluster-2-md-0
-      clusterName: ec2-cluster-2
+          name: mahmoud-capi-cluster-2-md-0
+      clusterName: mahmoud-capi-cluster-2
       infrastructureRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
         kind: AWSMachineTemplate
-        name: ec2-cluster-2-md-0
+        name: mahmoud-capi-cluster-2-md-0
       version: v1.17.3
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1alpha3
 kind: AWSMachineTemplate
 metadata:
-  name: ec2-cluster-2-md-0
+  name: mahmoud-capi-cluster-2-md-0
   namespace: default
 spec:
   template:
@@ -108,7 +108,7 @@ spec:
 apiVersion: bootstrap.cluster.x-k8s.io/v1alpha3
 kind: KubeadmConfigTemplate
 metadata:
-  name: ec2-cluster-2-md-0
+  name: mahmoud-capi-cluster-2-md-0
   namespace: default
 spec:
   template:
