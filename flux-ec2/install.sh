@@ -1,7 +1,7 @@
 #!/bin/bash
 export KUBECONFIG=/etc/kubernetes/admin.conf
 kubectl taint nodes --all node-role.kubernetes.io/master-
-kubectl install -f https://raw.githubusercontent.com/saada/gitops-cluster-management/master/examples/cni/weavenet.yaml
+kubectl apply -f https://raw.githubusercontent.com/saada/gitops-cluster-management/master/examples/cni/calico.yaml
 echo "Waiting for cni"
 sleep 1m
 
@@ -19,7 +19,7 @@ helm repo add fluxcd https://charts.fluxcd.io
 kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/master/deploy/crds.yaml
 helm upgrade -i flux fluxcd/flux --wait \
   --namespace fluxcd \
-  --set git.url=https://github.com/${GIT_USER}/${GIT_REPO_NAME}.git \
+  --set git.url=https://github.com/saada/gitops-cluster-management.git \
   --set git.path="flux-ec2" \
   --set git.timeout=120s \
   --set git.readonly=true \
