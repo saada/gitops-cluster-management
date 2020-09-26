@@ -95,7 +95,7 @@ make bootstrap
 
 ## Automatically install things on remote cluster
 
-Update your `KubeadmControlPlane` as follows
+Update your `KubeadmControlPlane.spec.kubeadmConfigSpec` as follows
 
 ```yaml
   postKubeadmCommands:

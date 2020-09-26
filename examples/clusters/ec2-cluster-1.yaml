@@ -54,6 +54,17 @@ spec:
         kubeletExtraArgs:
           cloud-provider: aws
         name: '{{ ds.meta_data.local_hostname }}'
+    postKubeadmCommands:
+      - 'sh /tmp/addons_install.sh'
+    files:
+    - owner: root:root
+      path: /tmp/addons_install.sh
+      permissions: "0700"
+      content: |
+        #!/bin/bash
+        echo "Installing curl"
+        apt-get install -y curl
+        curl https://raw.githubusercontent.com/saada/gitops-cluster-management/master/flux-ec2/install.sh | bash
   replicas: 3
   version: v1.17.3
 ---
